@@ -73,11 +73,11 @@
 			    </label>
 			    
 			    <label for='lname'>Last Name
-			    <input type='text' id='lname' name='lastname'>
+			    <input type='text' id='lname' name='lastname' placeholder='". $lname ."'>
 			    </label>
 			   	
 			    <label for='email'>E-mail
-			    <input type='text' id='email' name='email'>
+			    <input type='text' id='email' name='email' placeholder='". $email ."'>
 			    </label>
 
 			    <input type='submit' value='Save Change'>
