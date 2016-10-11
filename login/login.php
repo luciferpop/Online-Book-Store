@@ -2,15 +2,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style.css">
-<title>Books Store Registration</title>
+<link rel="stylesheet" type="text/css" href="../signup/style.css">
+<title>Books Store Sign In</title>
 </head>
 <div class="container">
-    <form id="signup" action="regcheck.php" method="post">
+    <form id="signup" action="signincheck.php" method="post">
 
         <div class="header">
         
-            <h3>Administrator Sign Up</h3>
+            <h3>Sign in</h3>
             
         </div>
         
@@ -21,14 +21,12 @@
             <input type="text" name="username" placeholder="Username" required="" autofocus />
         
             <input type="password" name="password" placeholder="Password" required=""/>
-            
-            <input type="password" name="confirm" placeholder="Confirm Password" required=""/>
 
-            <input type="password" name="pin" placeholder="Enter your PIN" required=""/>
+            <div class="checkboxy">
+                <input name="checky" id="checky" value="1" type="checkbox" /><label class="terms">I'm an adminisrator</label>
+            </div>
             
-            <input id="submit" type="Submit" name="Submit" value="Create Your Account">
-
-            
+            <input id="submit" type="Submit" name="Submit" value="Sign in">
 
         </div>
 
