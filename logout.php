@@ -25,7 +25,7 @@
     require "helper/header.php";
   ?>
   <!-- end of menu tab -->
-    <div class="crumb_navigation"> Navigation: <span class="current">Logout</span> </div>
+  <div class="crumb_navigation"> Navigation: <span class="current">Logout</span> </div>
   <div class="center">
       <div class="oferta"> 
         <div class="oferta_details">
@@ -33,7 +33,7 @@
           <div class="oferta_text"> Do you know. You can search either based on book's title or author's name. Also, try advanced serach, there are plenty of options for you to find a interesting book.</div>
           <a href="index.php" class="prod_buy">back to home</a> </div>
       </div>
-    </div>
+  </div>
 </div>
   <?php
     require "helper/footer.php";
