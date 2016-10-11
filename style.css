@@ -116,7 +116,7 @@ background:url(images/menu_title_bg.gif) no-repeat center;
 text-align:center;
 font-size:13px;
 font-weight:bold;
-color:#159dcc;
+color:#666600;
 line-height:30px;
 }
 /*--------left menu---------*/
@@ -149,18 +149,18 @@ text-align:center;
 background:url(images/box_bottom_bg.gif) no-repeat center bottom;
 }
 .product_title{
-color:#ff8a00;
+color:#666600;
 padding:5px 0 5px 0;
 font-weight:bold;
 }
 .product_title a{
 text-decoration:none;
-color:#ff8a00;
+color:#666600;
 padding:5px 0 5px 0;
 font-weight:bold;
 }
 .product_title a:hover{
-color:#064E5A;
+color:#666600;
 }
 .product_img{
 padding:5px 0 5px 0;
@@ -169,11 +169,11 @@ padding:5px 0 5px 0;
 padding:5px 0 5px 0;
 }
 span.reduce{
-color:#666666;
+color:#000000;
 text-decoration:line-through;
 }
 span.price{
-color: #ff8a00;
+color: #4d4d00;
 }
 /*----------newsletter--------------*/
 input.newsletter_input{
@@ -242,7 +242,7 @@ padding:0 0 0 10px;
 margin:0 0 0 5px;
 line-height:31px;
 font-size:12px;
-color:#159DCC;
+color:#666600;
 font-weight:bold;
 background:url(images/bar_bg.gif) no-repeat center;
 }

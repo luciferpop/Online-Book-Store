@@ -21,7 +21,7 @@
     	if (isset($_SESSION["login_name"])) {
     		$sql = "SELECT Fname, Lname, Email FROM USER WHERE Usrname = '".$_SESSION["login_name"]."'";
     		$result = mysqli_query($conn, $sql);
-    		var_dump($result);
+    		//var_dump($result);
     		while ($row = $result->fetch_assoc()) {
     			$fname = $row['Fname'];
     			$lname = $row['Lname'];
@@ -84,7 +84,7 @@
 			  </form>
 			</div>
     		<div class='title_box'>Recent Order</div>
-    		<div class='title_box'>Recently Purchased Products</div>
+    		<div class='title_box'>Recently Purchased</div>
     		</div>
     		";
     	} else {

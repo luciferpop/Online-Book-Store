@@ -14,7 +14,7 @@
 <div id="main_container">
   <div id="header">
     <div class="top_right">
-      <div class="big_banner"> <a href="#"><img src="images/banner728.jpg" alt="" border="0" /></a> </div>
+      
     </div>
     <div id="logo"> <a href="#"><img src="images/logo.png" alt="" border="0" width="182" height="85" /></a> </div>
   </div>
@@ -179,7 +179,7 @@
           <span class="border_cart"></span> Total: <span class="price">350$</span> </div>
         <div class="cart_icon"><a href="#"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
       </div>
-      <div class="title_box">What’s new</div>
+      <div class="title_box">What is new</div>
       <div class="border_box">
         <div class="product_title"><a href="#">Motorola 156 MX-VL</a></div>
         <div class="product_img"><a href="#"><img src="images/p2.jpg" alt="" border="0" /></a></div>
