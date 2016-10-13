@@ -6,6 +6,7 @@
         $psw = $_POST["password"]; 
         $chk = $_POST["checky"];
         if ($chk) {
+                $_SESSION['admin_chk'] = $chk;
         	$sql = "SELECT Usrname FROM ADMIN WHERE Usrname = '$_POST[username]' AND Passwd = '$_POST[password]'";
         	$result = mysqli_query($conn, $sql);
         	if (mysqli_num_rows($result)) {

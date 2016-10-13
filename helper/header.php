@@ -12,7 +12,7 @@
     <ul class="menu">
       <li><a href="index.php" class="nav"> Home </a></li>
       <li class="divider"></li>
-      <li><a href="#" class="nav">Products</a></li>
+      <li><a href="display_books.php" class="nav">Books</a></li>
       <li class="divider"></li>
       <li><a href="#" class="nav">Specials</a></li>
       <li class="divider"></li>
@@ -34,7 +34,7 @@
            <font color='orange' size='2'>"
            . $_SESSION["login_name"] . 
            "</font></a>
-           &nbsp!&nbsp&nbsp&nbsp&nbspWelcome!</font>";
+           !&nbsp&nbsp&nbsp&nbspWelcome!</font>";
         } else {
           echo "&nbsp&nbsp&nbsp<font color='white'>Hi, please <a href='login/login.php'><font color='orange'>Sign in</font></a>
                  or <a href='signup/signup.php'><font color='orange'>Sign up</font></a> !</font>";
