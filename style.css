@@ -287,10 +287,10 @@ border-top:1px #999999 dashed;
 width:173px;
 height:auto;
 float:left;
-padding:10px 10px 10px 11px;
+padding:10px 10px 10px 10px;
 }
 .center_prod_box{
-width:173px;height: auto;float:left; text-align:center;padding:0px; margin:0px; border:1px #F0F4F5 solid;
+width:173px;height: 230px;float:left; text-align:center;padding:0px; margin:0px; border:1px #F0F4F5 solid;
 }
 .prod_details_tab{
 width:173px;
@@ -576,4 +576,3 @@ input[type="submit"]{
     -moz-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
     box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
 }
-
