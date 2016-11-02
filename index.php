@@ -23,7 +23,7 @@
       <ul class="menu">
         <li><a href="index.php" class="nav"> Home </a></li>
         <li class="divider"></li>
-        <li><a href="display_books.php?page=0&cate=Drama" class="nav">Books</a></li>
+        <li><a href="display_books.php" class="nav">Books</a></li>
         <li class="divider"></li>
         <li><a href="#" class="nav">Specials</a></li>
         <li class="divider"></li>

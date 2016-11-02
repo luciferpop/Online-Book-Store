@@ -1,8 +1,26 @@
 <?php
 	session_start();
-  ini_set('display_errors', 'On');
+  //ini_set('display_errors', 'On');
 	include_once "helper/dbconn.php";
-  require_once('helper/pageclass.php'); 
+  require_once('helper/pageclass.php');
+
+  $curpage = empty($_GET['page']) ? 1 : $_GET['page'];
+  $cate = empty($_GET['cate']) ? NULL : $_GET['cate'];
+  $pub = empty($_GET['pub']) ? NULL : $_GET['pub'];
+  $total = 0;
+  // assemble sql for counting total records
+  if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
+    $sql = "SELECT COUNT(*) AS CNT FROM BOOK"; 
+  else if ($GLOBALS['pub'] == NULL)
+    $sql = "SELECT COUNT(*) AS CNT FROM BOOK WHERE BOOK.Category = '".$GLOBALS['cate']."'";    
+  else if ($GLOBALS['cate'] == NULL)
+    $sql = "SELECT COUNT(*) AS CNT FROM BOOK WHERE BOOK.PubName = '".$GLOBALS['pub']."'";
+  else 
+    $sql = "SELECT COUNT(*) AS CNT FROM BOOK WHERE BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$pub."'";
+  $result = mysqli_query($conn, $sql);
+    while ($row = mysqli_fetch_array($result)) {
+      $total = $row['CNT'];
+    } 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,70 +29,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="js/boxOver.js"></script>
-  <style type="text/css">
-      p{margin:0}
-      #page{
-          height:40px;
-          padding:20px 0px;
-      }
-      #page a{
-          display:block;
-          float:left;
-          margin-right:10px;
-          padding:2px 12px;
-          height:24px;
-          border:1px #cccccc solid;
-          background:#fff;
-          text-decoration:none;
-          color:#808080;
-          font-size:12px;
-          line-height:24px;
-      }
-      #page a:hover{
-          color:#077ee3;
-          border:1px #077ee3 solid;
-      }
-      #page a.cur{
-          border:none;
-          background:#077ee3;
-          color:#fff;
-      }
-      #page p{
-          float:left;
-          padding:2px 12px;
-          font-size:12px;
-          height:24px;
-          line-height:24px;
-          color:#bbb;
-          border:1px #ccc solid;
-          background:#fcfcfc;
-          margin-right:8px;
-
-      }
-      #page p.pageRemark{
-          border-style:none;
-          background:none;
-          margin-right:0px;
-          padding:4px 0px;
-          color:#666;
-      }
-      #page p.pageRemark b{
-          color:red;
-      }
-      #page p.pageEllipsis{
-          border-style:none;
-          background:none;
-          padding:4px 0px;
-          color:#808080;
-      }
-
-      #sp { 
-        margin-left: 80px; 
-      }
-
-      .dates li {font-size: 14px;margin:20px 0}
-      .dates li span{float:right}
-  </style>
 </head>
 <body>
 
@@ -82,7 +36,21 @@
 	<?php 
 		require('helper/header.php');
 	?>
-    <div class="crumb_navigation"> Navigation: <span class="current">Browse Books </span> </div>
+    <div class="crumb_navigation"> Navigation: <span class="current">Browse Books
+    <?php 
+      $start = ($GLOBALS['curpage']-1)*9+1;
+      $end = $start + 8;
+      echo "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          \t".$start."-".$end." of ".$GLOBALS['total']." results ";
+      if ($GLOBALS['cate'] != NULL && $GLOBALS['pub'] == NULL)
+        echo "for <b><font color='orange'>".$GLOBALS['cate']."</font></b>";
+      else if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] != NULL)
+        echo "from <b><font color='orange'>".$GLOBALS['pub']."</font></b>";
+      else if ($GLOBALS['cate'] != NULL && $GLOBALS['pub'] != NULL)
+        echo "for <b><font color='orange'>".$GLOBALS['cate']."</font></b> from <b><font color='orange'>".$GLOBALS['pub']."</font></b>";
+      echo "&nbsp&nbsp<a href='display_books.php' title='Clear Filters'>X</a>";
+    ?>  
+    </span> </div>
     <div class="left_content">
       <div class="title_box">Popular Categories</div>
         <ul class="left_menu">
@@ -93,47 +61,66 @@
               $index = 0;
               while ($row = $cate_result->fetch_assoc()) {
                   if ($index%2 == 0) 
-                      echo '<li class="odd"><a href="?page=0&cate='.$row['Category'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="odd"><a href="?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   else
-                      echo '<li class="even"><a href="?page=0&cate='.$row['Category'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="odd"><a href="?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   $index++;
               }
           ?>
         </ul>
       <div class="title_box">Popular Publishers</div>
         <ul class="left_menu">
+          <?php
+              // select 8 most popular publisher from BOOK
+              $sql = "SELECT PubName, COUNT(PubName) AS CNT FROM BOOK GROUP BY PubName ORDER BY CNT DESC LIMIT 8";
+              $result = mysqli_query($conn, $sql);
+              $index = 0;
+              while ($row = $result->fetch_assoc()) {
+                  if ($index%2 == 0) 
+                      echo '<li class="odd"><a href="?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                  else
+                      echo '<li class="odd"><a href="?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                  $index++;
+              }
+          ?>
         </ul>
     </div>
     <div class="center_content">
-    <!-- randomly display books -->
+    <!-- display books -->
         <?php
-            $showrow = 9; 
-            $curpage = empty($_GET['page']) ? 1 : $_GET['page'];
-            $cate = empty($_GET['cate']) ? NULL : $_GET['cate'];
-            $url = "?page={page}&cate=".$cate.""; 
-            //$sql = "SELECT * FROM userinfo";
-            $total = 265011;
-            if (!empty($_GET['page']) && $total != 0 && $curpage > ceil($total / $showrow))
-                $curpage = ceil($total_rows / $showrow); 
-            // fetch data
-            $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$cate."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";
-            $result = mysqli_query($conn, $sql);
             $hrefid = 0;
+            $showrow = 9;
+            $total = 265011;
+            $url = "?page={page}&cate=".$cate."&pub=".$pub.""; 
+            if (!empty($_GET['page']) && $total != 0 && $curpage > ceil($total / $showrow))
+                $curpage = ceil($total_rows / $showrow);
+
+            // assemble sql
+            if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN LIMIT ".($curpage - 1) * $showrow ." ,$showrow;"; 
+            else if ($GLOBALS['pub'] == NULL)
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";    
+            else if ($GLOBALS['cate'] == NULL)
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";
+            else 
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$pub."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";
+            // fetch data
+            $result = mysqli_query($conn, $sql);
             while ($row = mysqli_fetch_array($result)) {
                 echo '
                 <div class="prod_box">
                     <div class="center_prod_box">
                       <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
                       <div class="product_img">
-                          <a href="#" id="'.$hrefid.'">
-                          <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
-                          </a>
-                          <script type="text/javascript">
-                            var x = document.getElementById("'.$row['ISBN'].'");
-                            //document.write(x.naturalWidth);
-                            if (x.naturalWidth == 1)
-                                document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
-                          </script>
+                        <a href="#" id="'.$hrefid.'">
+                            <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
+                        </a>
+                        <script type="text/javascript">
+                          var x = document.getElementById("'.$row['ISBN'].'");
+                          //document.write(x.naturalWidth);
+                          if (x.naturalWidth == 1)
+                              document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
+                        </script>
                       </div>
                       <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                     </div>
