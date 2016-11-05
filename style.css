@@ -290,8 +290,22 @@ height:auto;
 float:left;
 padding:10px 10px 10px 10px;
 }
+.detail_prod_box{
+width:250px;height: 350px;
+float:left; 
+text-align:center;
+padding:0px; 
+margin:0px; 
+border:1px #F0F4F5 solid;
+padding:10px 10px 10px 10px;
+}
 .center_prod_box{
-width:173px;height: 230px;float:left; text-align:center;padding:0px; margin:0px; border:1px #F0F4F5 solid;
+width:173px;height: 230px;
+float:left; 
+text-align:center;
+padding:0px; 
+margin:0px; 
+border:1px #F0F4F5 solid;
 }
 .prod_details_tab{
 width:173px;
@@ -640,3 +654,4 @@ margin-left: 50px;
 
 .dates li {font-size: 14px;margin:20px 0}
 .dates li span{float:right}
+

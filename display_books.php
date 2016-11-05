@@ -7,6 +7,9 @@
   $curpage = empty($_GET['page']) ? 1 : $_GET['page'];
   $cate = empty($_GET['cate']) ? NULL : $_GET['cate'];
   $pub = empty($_GET['pub']) ? NULL : $_GET['pub'];
+  // sort options
+  $odr_price = empty($_GET['odr_price']) ? FALSE : $_GET['odr_price'];
+  $odr_title = empty($_GET['odr_title']) ? FALSE : $_GET['odr_title'];
   $total = 0;
   // assemble sql for counting total records
   if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
@@ -48,6 +51,8 @@
         echo "from <b><font color='orange'>".$GLOBALS['pub']."</font></b>";
       else if ($GLOBALS['cate'] != NULL && $GLOBALS['pub'] != NULL)
         echo "for <b><font color='orange'>".$GLOBALS['cate']."</font></b> from <b><font color='orange'>".$GLOBALS['pub']."</font></b>";
+      if ($odr_price) echo " Ordered by <b><font color='orange'>Price</font></b>";
+      else if ($odr_title) echo " Ordered by <b><font color='orange'>Title</font></b>";
       echo "&nbsp&nbsp<a href='display_books.php' title='Clear Filters'>X</a>";
     ?>  
     </span> </div>
@@ -55,7 +60,7 @@
       <div class="title_box">Popular Categories</div>
         <ul class="left_menu">
           <?php
-              // select 8 categories with most books from table 'BOOK'
+              // select 10 categories with most books from table 'BOOK'
               $cate_sql = "SELECT Category, COUNT(ISBN) AS CNT FROM BOOK GROUP BY Category ORDER BY COUNT(ISBN) DESC LIMIT 10";
               $cate_result = mysqli_query($conn, $cate_sql);
               $index = 0;
@@ -63,7 +68,7 @@
                   if ($index%2 == 0) 
                       echo '<li class="odd"><a href="?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   else
-                      echo '<li class="odd"><a href="?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="even"><a href="?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   $index++;
               }
           ?>
@@ -79,32 +84,42 @@
                   if ($index%2 == 0) 
                       echo '<li class="odd"><a href="?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
                   else
-                      echo '<li class="odd"><a href="?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="even"><a href="?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
                   $index++;
               }
           ?>
         </ul>
+      <div class="title_box">Sort By</div>
+      <ul class="left_menu">
+        <li class="odd"><?php echo '<a href="?cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_price=TRUE">Price</a>';?></li>
+        <li class="even"><?php echo '<a href="?cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_title=TRUE">Title</a>';?></li>
+      </ul>
     </div>
     <div class="center_content">
     <!-- display books -->
         <?php
             $hrefid = 0;
             $showrow = 9;
-            $total = 265011;
-            $url = "?page={page}&cate=".$cate."&pub=".$pub.""; 
+            $url = "?page={page}&cate=".$cate."&pub=".$pub."&odr_price=".$odr_price."&odr_title=".$odr_title.""; 
             if (!empty($_GET['page']) && $total != 0 && $curpage > ceil($total / $showrow))
                 $curpage = ceil($total_rows / $showrow);
 
             // assemble sql
             if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN LIMIT ".($curpage - 1) * $showrow ." ,$showrow;"; 
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN LIMIT ".($curpage - 1) * $showrow ." ,$showrow"; 
             else if ($GLOBALS['pub'] == NULL)
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";    
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";    
             else if ($GLOBALS['cate'] == NULL)
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
             else 
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$pub."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow;";
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$pub."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
+        
+            if ($odr_price)
+              $sql = "SELECT * FROM (".$sql.") TMP ORDER BY TMP.Price";
+            if ($odr_title)
+              $sql = "SELECT * FROM (".$sql.") TMP ORDER BY TMP.Title";
             // fetch data
+            //echo $sql;
             $result = mysqli_query($conn, $sql);
             while ($row = mysqli_fetch_array($result)) {
                 echo '
@@ -125,7 +140,7 @@
                       <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                     </div>
                     <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
-                    <a href="#" class="prod_details">Details</a></div>
+                    <a target="_blank" href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
                 </div>
                 ';
                 $hrefid++;
@@ -167,6 +182,7 @@
       <div class="banner_adds"> <a href="#"><img src="images/bann1.jpg" alt="" border="0" /></a> </div>
     </div>
     <!-- end of right content -->
+    </div>
 <?php
     require "helper/footer.php";
 ?>
