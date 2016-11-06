@@ -171,11 +171,15 @@
     <div class="right_content">
       <div class="title_box">Search</div>
       <div class="border_box">
-        <input type="text" name="newsletter" class="newsletter_input" value="keyword"/>
-        <a href="#" class="join">search</a> </div>
+        <form name="form" action="" method="post">
+        <input type="text" name="newsletter" class="newsletter_input" placeholder="title of the book"/>
+        <?php echo '<a target="_blank" href="search_result.php?title='.$_POST['newsletter'].'" class="join">Search</a>'; ?>
+        <a target="_blank" href="advanced_search.php" class="join">Advanced</a>
+        </form>
+        </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
-        <div class="cart_details"> 3 items <br />
+        <div class="cart_details"> 3 items <br/>
           <span class="border_cart"></span> Total: <span class="price">350$</span> </div>
         <div class="cart_icon"><a href="#"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
       </div>

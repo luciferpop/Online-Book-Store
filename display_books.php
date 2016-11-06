@@ -112,7 +112,7 @@
             else if ($GLOBALS['cate'] == NULL)
               $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
             else 
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$pub."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
+              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
         
             if ($odr_price)
               $sql = "SELECT * FROM (".$sql.") TMP ORDER BY TMP.Price";
@@ -159,7 +159,7 @@
     <div class="right_content">
       <div class="title_box">Search</div>
       <div class="border_box">
-        <input type="text" name="newsletter" class="newsletter_input" value="keyword"/>
+        <input type="text" name="newsletter" class="newsletter_input" placeholder="keyword"/>
         <a href="#" class="join">search</a> </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
@@ -168,18 +168,34 @@
         <div class="cart_icon"><a href="#"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
       </div>
       <div class="title_box">What is new</div>
-      <div class="title_box">Manufacturers</div>
-      <ul class="left_menu">
-        <li class="odd"><a href="#">Bosch</a></li>
-        <li class="even"><a href="#">Samsung</a></li>
-        <li class="odd"><a href="#">Makita</a></li>
-        <li class="even"><a href="#">LG</a></li>
-        <li class="odd"><a href="#">Fujitsu Siemens</a></li>
-        <li class="even"><a href="#">Motorola</a></li>
-        <li class="odd"><a href="#">Phillips</a></li>
-        <li class="even"><a href="#">Beko</a></li>
-      </ul>
-      <div class="banner_adds"> <a href="#"><img src="images/bann1.jpg" alt="" border="0" /></a> </div>
+      <?php 
+      $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND Year >= '2005' AND Year<='2016' LIMIT 2";
+      $result = mysqli_query($conn, $sql);
+            while ($row = mysqli_fetch_array($result)) {
+                echo '
+                <div class="prod_box">
+                    <div class="center_prod_box">
+                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                      <div class="product_img">
+                        <a href="#" id="'.$hrefid.'">
+                            <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
+                        </a>
+                        <script type="text/javascript">
+                          var x = document.getElementById("'.$row['ISBN'].'");
+                          //document.write(x.naturalWidth);
+                          if (x.naturalWidth == 1)
+                              document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
+                        </script>
+                      </div>
+                      <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
+                    </div>
+                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                    <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
+                </div>
+                ';
+                $hrefid++;
+            }
+    ?>
     </div>
     <!-- end of right content -->
     </div>
