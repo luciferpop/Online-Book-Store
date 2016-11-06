@@ -158,9 +158,15 @@
     <!-- end of center content -->
     <div class="right_content">
       <div class="title_box">Search</div>
-      <div class="border_box">
-        <input type="text" name="newsletter" class="newsletter_input" placeholder="keyword"/>
-        <a href="#" class="join">search</a> </div>
+      <div>
+        <form action="search_result.php" method="post">
+          <div>
+            <input type="text" name="title" class="search_input" placeholder="enter the title">
+          </div>
+          <input class="search_submit" type='submit' name="submit" value='Search'>
+          <a target="_blank" href="advanced_search.php" class="join">Advanced</a>
+        </form>
+      </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
         <div class="cart_details"> 3 items <br />

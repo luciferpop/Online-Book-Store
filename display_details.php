@@ -1,6 +1,6 @@
 <?php
 	include_once "helper/dbconn.php";
-  	require_once('helper/pageclass.php');
+  require_once('helper/pageclass.php');
 	$id = empty($_GET['id']) ? NULL : $_GET['id'];
 	$sql = "SELECT Title, Price, PubName, Category, Year FROM BOOK NATURAL JOIN PRICE WHERE ISBN = '".$id."'";
 	$result = mysqli_query($conn, $sql);
@@ -36,30 +36,31 @@
 		<?php 
 			$sql = "SELECT * FROM (SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT 10) TMP ORDER BY RAND() LIMIT 2";
 			$result = mysqli_query($conn, $sql);
-            while ($row = mysqli_fetch_array($result)) {
-                echo '
-                <div class="prod_box">
-                    <div class="center_prod_box">
-                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
-                      <div class="product_img">
-                        <a href="#" id="'.$hrefid.'">
-                            <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
-                        </a>
-                        <script type="text/javascript">
-                          var x = document.getElementById("'.$row['ISBN'].'");
-                          //document.write(x.naturalWidth);
-                          if (x.naturalWidth == 1)
-                              document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
-                        </script>
-                      </div>
-                      <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
-                    </div>
-                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
-                    <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
+      $hrefid = 0;
+      while ($row = mysqli_fetch_array($result)) {
+          echo '
+          <div class="prod_box">
+              <div class="center_prod_box">
+                <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                <div class="product_img">
+                  <a href="#" id="'.$hrefid.'">
+                      <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
+                  </a>
+                  <script type="text/javascript">
+                    var x = document.getElementById("'.$row['ISBN'].'");
+                    //document.write(x.naturalWidth);
+                    if (x.naturalWidth == 1)
+                        document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
+                  </script>
                 </div>
-                ';
-                $hrefid++;
-            }
+                <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
+              </div>
+              <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+              <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
+          </div>
+          ';
+          $hrefid++;
+      }
 		?>
 		<?php echo "<img id='first' src='http://images.amazon.com/images/P/".$id.".01.MZZZZZZZ.jpg' style='visibility: hidden;'>" ?>
 	</div>
@@ -120,32 +121,33 @@
       </div>
       <div class="title_box">What is new</div>
       <?php 
-			$sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND Year >= '2005' AND Year<='2016' LIMIT 2";
-			$result = mysqli_query($conn, $sql);
-            while ($row = mysqli_fetch_array($result)) {
-                echo '
-                <div class="prod_box">
-                    <div class="center_prod_box">
-                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
-                      <div class="product_img">
-                        <a href="#" id="'.$hrefid.'">
-                            <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
-                        </a>
-                        <script type="text/javascript">
-                          var x = document.getElementById("'.$row['ISBN'].'");
-                          //document.write(x.naturalWidth);
-                          if (x.naturalWidth == 1)
-                              document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
-                        </script>
-                      </div>
-                      <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
-                    </div>
-                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
-                    <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
+  			$sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND Year >= '2005' AND Year<='2016' LIMIT 2";
+  			$result = mysqli_query($conn, $sql);
+        $hrefid = 0;
+        while ($row = mysqli_fetch_array($result)) {
+            echo '
+            <div class="prod_box">
+                <div class="center_prod_box">
+                  <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                  <div class="product_img">
+                    <a href="#" id="'.$hrefid.'">
+                        <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
+                    </a>
+                    <script type="text/javascript">
+                      var x = document.getElementById("'.$row['ISBN'].'");
+                      //document.write(x.naturalWidth);
+                      if (x.naturalWidth == 1)
+                          document.getElementById("'.$hrefid.'").innerHTML = "<img src=\'images/default_cover_med.jpg\'>";
+                    </script>
+                  </div>
+                  <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                 </div>
-                ';
-                $hrefid++;
-            }
+                <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
+            </div>
+            ';
+            $hrefid++;
+        }
 		?>
     <!-- end of right contents-->
 </div>

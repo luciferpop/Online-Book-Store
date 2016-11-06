@@ -356,6 +356,7 @@ line-height:24px;
 text-decoration:none;
 color: #006600;
 }
+
 /*---------prod_box_big----------*/
 .prod_box_big{
 width:554px;
@@ -556,25 +557,62 @@ input.user_input{
     height: 22px;
     width:280px;
 }
-input.user_input:focus {
-    background:#f5fcfe;
-    text-indent: 0;
-    z-index: 1;
+input.search_input{
     color: #373737;
-    -webkit-transition-duration: 400ms;
-    -webkit-transition-property: width, background;
-    -webkit-transition-timing-function: ease;
-    -moz-transition-duration: 400ms;
-    -moz-transition-property: width, background;
-    -moz-transition-timing-function: ease;
-    -o-transition-duration: 400ms;
-    -o-transition-property: width, background;
-    -o-transition-timing-function: ease;
-    width: 380px;
-    
-    border-color:#ccc;
-    box-shadow:0 0 5px rgba(4, 129, 177, 0.5);
-    opacity:0.6;
+    background: #fff;
+    border: 1px solid #CCCCCC;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.2em;
+    margin:10px 0px;
+
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
+    padding: 5px 6px;
+    height: 20px;
+    width:150px;
+}
+input.search_input:focus{
+  background:#f5fcfe;
+  text-indent: 0;
+  z-index: 1;
+  color: #373737;
+  -webkit-transition-duration: 400ms;
+  -webkit-transition-property: width, background;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-duration: 400ms;
+  -moz-transition-property: width, background;
+  -moz-transition-timing-function: ease;
+  -o-transition-duration: 400ms;
+  -o-transition-property: width, background;
+  -o-transition-timing-function: ease;
+  width: 170px;
+  
+  border-color:#ccc;
+  box-shadow:0 0 5px rgba(4, 129, 177, 0.5);
+  opacity:0.6;
+}
+input.user_input:focus {
+  background:#f5fcfe;
+  text-indent: 0;
+  z-index: 1;
+  color: #373737;
+  -webkit-transition-duration: 400ms;
+  -webkit-transition-property: width, background;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-duration: 400ms;
+  -moz-transition-property: width, background;
+  -moz-transition-timing-function: ease;
+  -o-transition-duration: 400ms;
+  -o-transition-property: width, background;
+  -o-transition-timing-function: ease;
+  width: 380px;
+  
+  border-color:#ccc;
+  box-shadow:0 0 5px rgba(4, 129, 177, 0.5);
+  opacity:0.6;
 }
 input[type="submit"]{
     background: #222;
@@ -593,7 +631,23 @@ input[type="submit"]{
     -moz-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
     box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
 }
-
+input[type="submit"].search_submit{
+    background: #222;
+    border: none;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+    text-transform:uppercase;
+    color: #eee;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 0 0 5px 5px;
+    padding: 5px 22px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-border-radius:4px;
+    -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+}
 p{margin:0}
 #page{
   height:40px;
@@ -657,3 +711,29 @@ margin-left: 50px;
 .dates li {font-size: 14px;margin:20px 0}
 .dates li span{float:right}
 
+.search button{
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.search button.hover{
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
