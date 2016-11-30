@@ -45,7 +45,7 @@ function check() {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style.css">
-<title>Books Store Registration</title>
+<title>Book Store | Registration</title>
 </head>
 <div class="container">
     <form id="signup" action="regcheck.php" method="post" name="signupform">

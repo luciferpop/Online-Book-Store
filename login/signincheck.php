@@ -13,7 +13,7 @@
                         $_SESSION['login_name'] = $_POST['username'];
         		echo "<script>
         			alert('Login successfully, click OK to continue...');
-        			window.location.href='../index.php';
+        			window.location.href='../admin_index.php';
         			</script>";
         	} else {
         		echo "<script>
@@ -22,10 +22,13 @@
         			</script>";
         	}
         } else {
-                $sql = "SELECT Usrname FROM USER WHERE Usrname = '$_POST[username]' AND Passwd = '$_POST[password]'";
+                $sql = "SELECT ID, Usrname FROM USER WHERE Usrname = '$_POST[username]' AND Passwd = '$_POST[password]'";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result)) {
-                        $_SESSION['login_name'] = $_POST['username'];
+                        while ($row = mysqli_fetch_array($result)) {
+                                $_SESSION['login_name'] = $row['Usrname'];
+                                $_SESSION['login_id'] = $row['ID'];
+                        }
                         echo "<script>
                                 alert('Login successfully, click OK to continue...');
                                 window.location.href='../index.php';

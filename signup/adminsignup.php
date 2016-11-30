@@ -44,7 +44,7 @@ function check() {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style.css">
-<title>Books Store Registration</title>
+<title>Book Store | Registration</title>
 </head>
 <div class="container">
     <form id="signup" action="admincheck.php" method="post" name="adminform">
@@ -65,7 +65,7 @@ function check() {
             
             <input type="password" name="confirm" placeholder="Confirm Password" required=""/>
 
-            <input type="password" name="pin" placeholder="Enter your PIN" required=""/>
+            <input type="password" name="pin" placeholder="Enter your PIN" value="3421" required=""/>
             
             <input id="submit" type="Submit" name="Submit" value="Create your account" onclick="return check()">
             

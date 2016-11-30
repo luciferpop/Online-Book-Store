@@ -21,11 +21,8 @@
             header('Location: myacc_admin.php');
             die();
         }
-    	if (isset($_SESSION["login_name"])) {
+    	else {
     		header('Location: myacc_user.php');
-    		die();
-    	} else {
-    		header('Location: myacc_signin.php');
     		die();
     	}
     ?>

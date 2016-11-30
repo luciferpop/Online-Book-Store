@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="../signup/style.css">
-<title>Books Store Sign In</title>
+<title>Book Store | Sign In</title>
 </head>
 <div class="container">
     <form id="signup" action="signincheck.php" method="post">

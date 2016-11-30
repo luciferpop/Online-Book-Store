@@ -1,18 +1,27 @@
 <?php
   session_start();
+  include "cart.php";
+  $cart = new Cart;
   //ini_set('display_errors', 'On');
   include_once "helper/dbconn.php";
   require_once('helper/pageclass.php');
   $title = empty($_GET['title']) ? $_POST['title'] : $_GET['title'];
   $curpage = empty($_GET['page']) ? 1 : $_GET['page'];
-  $cate = empty($_GET['cate']) ? NULL : $_GET['cate'];
-  $pub = empty($_GET['pub']) ? NULL : $_GET['pub'];
+  $cate = empty($_GET['cate']) ? $_POST['cate'] : $_GET['cate'];
+  $pub = empty($_GET['pub']) ? $_POST['pub'] : $_GET['pub'];
+  $year = empty($_GET['year']) ? $_POST['year'] : $_GET['year'];
   // sort options
   $odr_price = empty($_GET['odr_price']) ? FALSE : $_GET['odr_price'];
   $odr_title = empty($_GET['odr_title']) ? FALSE : $_GET['odr_title'];
   $total = 0;
   // assemble sql for counting total records
   $global_sql = "SELECT * FROM BOOK WHERE Title LIKE '%".$title."%'";
+  if ($cate != null)
+    $global_sql .= " AND Category='".$cate."'";
+  if ($pub != null)
+    $global_sql .= " AND PubName='".$pub."'";
+  if ($year != null)
+    $global_sql .= " AND Year = '".$year."'";
   $total = 0;
   // assemble sql for counting total records
   if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
@@ -31,7 +40,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Books Store | Search Results</title>
+<title>Book Store | Search Results</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="js/boxOver.js"></script>
@@ -69,9 +78,9 @@
               $index = 0;
               while ($row = $cate_result->fetch_assoc()) {
                   if ($index%2 == 0) 
-                      echo '<li class="odd"><a href="?&title='.$title.'&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="odd"><a href="?&title='.$title.'&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'&year='.$year.'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   else
-                      echo '<li class="even"><a href="?&title='.$title.'&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="even"><a href="?&title='.$title.'&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'&year='.$year.'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   $index++;
               }
           ?>
@@ -85,17 +94,17 @@
               $index = 0;
               while ($row = $result->fetch_assoc()) {
                   if ($index%2 == 0) 
-                      echo '<li class="odd"><a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="odd"><a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'&year='.$year.'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
                   else
-                      echo '<li class="even"><a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="even"><a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'&year='.$year.'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
                   $index++;
               }
           ?>
         </ul>
       <div class="title_box">Sort By</div>
       <ul class="left_menu">
-        <li class="odd"><?php echo '<a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_price=TRUE">Price</a>';?></li>
-        <li class="even"><?php echo '<a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_title=TRUE">Title</a>';?></li>
+        <li class="odd"><?php echo '<a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&year='.$year.'&odr_price=TRUE">Price</a>';?></li>
+        <li class="even"><?php echo '<a href="?&title='.$title.'&cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&year='.$year.'&odr_title=TRUE">Title</a>';?></li>
       </ul>
     </div>
     <div class="center_content">
@@ -103,7 +112,7 @@
         <?php
             $hrefid = 0;
             $showrow = 9;
-            $url = "?page={page}&title=".$title."&cate=".$cate."&pub=".$pub."&odr_price=".$odr_price."&odr_title=".$odr_title.""; 
+            $url = "?page={page}&title=".$title."&cate=".$cate."&pub=".$pub."&year=".$year."&odr_price=".$odr_price."&odr_title=".$odr_title.""; 
             if (!empty($_GET['page']) && $total != 0 && $curpage > ceil($total / $showrow))
                 $curpage = ceil($total_rows / $showrow);
 
@@ -128,9 +137,9 @@
                 echo '
                 <div class="prod_box">
                     <div class="center_prod_box">
-                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                      <div class="product_title"><a href="display_details.php?id='.$row['ISBN'].'">'. $row['Title'] .'</a></div>
                       <div class="product_img">
-                        <a href="#" id="'.$hrefid.'">
+                        <a href="display_details.php?id='.$row['ISBN'].'" id="'.$hrefid.'">
                             <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
                         </a>
                         <script type="text/javascript">
@@ -142,7 +151,7 @@
                       </div>
                       <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                     </div>
-                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                    <div class="prod_details_tab"> <a href="cart_action.php?action=addToCart&id='.$row['ISBN'].'" class="prod_buy">Add to Cart</a> 
                     <a target="_blank" href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
                 </div>
                 ';
@@ -164,7 +173,7 @@
         <div>
         <form action="search_result.php" method="post">
           <div>
-            <input type="text" name="title" class="search_input" placeholder="enter the title">
+            <input type="text" name="title" class="search_input" placeholder="Search the title">
           </div>
           <input class="search_submit" type='submit' name="submit" value='Search'>
           <a target="_blank" href="advanced_search.php" class="join">Advanced</a>
@@ -172,9 +181,9 @@
       </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
-        <div class="cart_details"> 3 items <br />
-          <span class="border_cart"></span> Total: <span class="price">350$</span> </div>
-        <div class="cart_icon"><a href="#"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
+        <div class="cart_details"> <?php echo $cart->total_items(); ?> items <br />
+          <span class="border_cart"></span> Total: <span class="price"><?php echo $cart->total(); ?> $</span> </div>
+        <div class="cart_icon"><a href="view_cart.php"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
       </div>
       <div class="title_box">What is new</div>
       <?php 
@@ -184,9 +193,9 @@
                 echo '
                 <div class="prod_box">
                     <div class="center_prod_box">
-                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                      <div class="product_title"><a href="display_details.php?id='.$row['ISBN'].'">'. $row['Title'] .'</a></div>
                       <div class="product_img">
-                        <a href="#" id="'.$hrefid.'">
+                        <a href="display_details.php?id='.$row['ISBN'].'" id="'.$hrefid.'">
                             <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
                         </a>
                         <script type="text/javascript">
@@ -198,7 +207,7 @@
                       </div>
                       <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                     </div>
-                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                    <div class="prod_details_tab"> <a href="cart_action.php?action=addToCart&id='.$row['ISBN'].'" class="prod_buy">Add to Cart</a> 
                     <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
                 </div>
                 ';

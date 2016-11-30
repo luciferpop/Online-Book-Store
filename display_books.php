@@ -1,45 +1,52 @@
 <?php
-	session_start();
+  session_start();
+  include 'cart.php';
+  $cart = new Cart;
   //ini_set('display_errors', 'On');
-	include_once "helper/dbconn.php";
+  include_once "helper/dbconn.php";
   require_once('helper/pageclass.php');
-
   $curpage = empty($_GET['page']) ? 1 : $_GET['page'];
-  $cate = empty($_GET['cate']) ? NULL : $_GET['cate'];
-  $pub = empty($_GET['pub']) ? NULL : $_GET['pub'];
+  $cate = empty($_GET['cate']) ? $_POST['cate'] : $_GET['cate'];
+  $pub = empty($_GET['pub']) ? $_POST['pub'] : $_GET['pub'];
   // sort options
   $odr_price = empty($_GET['odr_price']) ? FALSE : $_GET['odr_price'];
   $odr_title = empty($_GET['odr_title']) ? FALSE : $_GET['odr_title'];
   $total = 0;
   // assemble sql for counting total records
+  $global_sql = "SELECT * FROM BOOK WHERE Title LIKE '%'";
+  if ($cate != null)
+    $global_sql .= " AND Category='".$cate."'";
+  if ($pub != null)
+    $global_sql .= " AND PubName='".$pub."'";
+  $total = 0;
+  // assemble sql for counting total records
   if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
-    $sql = "SELECT COUNT(*) AS CNT FROM BOOK"; 
+    $sql = "SELECT COUNT(*) AS CNT FROM (".$global_sql.") T"; 
   else if ($GLOBALS['pub'] == NULL)
-    $sql = "SELECT COUNT(*) AS CNT FROM BOOK WHERE BOOK.Category = '".$GLOBALS['cate']."'";    
+    $sql = "SELECT COUNT(*) AS CNT FROM (".$global_sql.") T WHERE T.Category = '".$GLOBALS['cate']."'";    
   else if ($GLOBALS['cate'] == NULL)
-    $sql = "SELECT COUNT(*) AS CNT FROM BOOK WHERE BOOK.PubName = '".$GLOBALS['pub']."'";
+    $sql = "SELECT COUNT(*) AS CNT FROM (".$global_sql.") T WHERE T.PubName = '".$GLOBALS['pub']."'";
   else 
-    $sql = "SELECT COUNT(*) AS CNT FROM BOOK WHERE BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$pub."'";
+    $sql = "SELECT COUNT(*) AS CNT FROM (".$global_sql.") T WHERE T.Category = '".$GLOBALS['cate']."' AND T.PubName = '".$pub."'";
   $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_array($result)) {
       $total = $row['CNT'];
-    } 
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Books Store | Books</title>
+<title>Book Store | Show Books</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="js/boxOver.js"></script>
 </head>
 <body>
-
 <div id="main_container">
-	<?php 
-		require('helper/header.php');
-	?>
-    <div class="crumb_navigation"> Navigation: <span class="current">Browse Books
+  <?php 
+    require('helper/header.php');
+  ?>
+    <div class="crumb_navigation"> Navigation: <span class="current">Search Results
     <?php 
       $start = ($GLOBALS['curpage']-1)*9+1;
       $end = $start + 8;
@@ -57,11 +64,11 @@
     ?>  
     </span> </div>
     <div class="left_content">
-      <div class="title_box">Popular Categories</div>
+      <div class="title_box">Categories</div>
         <ul class="left_menu">
           <?php
               // select 10 categories with most books from table 'BOOK'
-              $cate_sql = "SELECT Category, COUNT(ISBN) AS CNT FROM BOOK GROUP BY Category ORDER BY COUNT(ISBN) DESC LIMIT 10";
+              $cate_sql = "SELECT Category, COUNT(ISBN) AS CNT FROM (".$global_sql.") T GROUP BY T.Category ORDER BY COUNT(T.ISBN) DESC LIMIT 10";
               $cate_result = mysqli_query($conn, $cate_sql);
               $index = 0;
               while ($row = $cate_result->fetch_assoc()) {
@@ -73,11 +80,11 @@
               }
           ?>
         </ul>
-      <div class="title_box">Popular Publishers</div>
+      <div class="title_box">Publishers</div>
         <ul class="left_menu">
           <?php
               // select 8 most popular publisher from BOOK
-              $sql = "SELECT PubName, COUNT(PubName) AS CNT FROM BOOK GROUP BY PubName ORDER BY CNT DESC LIMIT 8";
+              $sql = "SELECT PubName, COUNT(PubName) AS CNT FROM (".$global_sql.") T GROUP BY T.PubName ORDER BY CNT DESC LIMIT 8";
               $result = mysqli_query($conn, $sql);
               $index = 0;
               while ($row = $result->fetch_assoc()) {
@@ -91,8 +98,8 @@
         </ul>
       <div class="title_box">Sort By</div>
       <ul class="left_menu">
-        <li class="odd"><?php echo '<a href="?cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_price=TRUE">Price</a>';?></li>
-        <li class="even"><?php echo '<a href="?cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_title=TRUE">Title</a>';?></li>
+        <li class="odd"><?php echo '<a href="?&cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_price=TRUE">Price</a>';?></li>
+        <li class="even"><?php echo '<a href="?&cate='.$GLOBALS['cate'].'&pub='.$GLOBALS['pub'].'&odr_title=TRUE">Title</a>';?></li>
       </ul>
     </div>
     <div class="center_content">
@@ -106,13 +113,13 @@
 
             // assemble sql
             if ($GLOBALS['cate'] == NULL && $GLOBALS['pub'] == NULL)
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN LIMIT ".($curpage - 1) * $showrow ." ,$showrow"; 
+              $sql = "SELECT T.ISBN, Title, Price FROM (".$global_sql.") T, PRICE WHERE T.ISBN = PRICE.ISBN LIMIT ".($curpage - 1) * $showrow ." ,$showrow"; 
             else if ($GLOBALS['pub'] == NULL)
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";    
+              $sql = "SELECT T.ISBN, Title, Price FROM (".$global_sql.") T, PRICE WHERE T.ISBN = PRICE.ISBN AND T.Category = '".$GLOBALS['cate']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";    
             else if ($GLOBALS['cate'] == NULL)
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
+              $sql = "SELECT T.ISBN, Title, Price FROM (".$global_sql.") T, PRICE WHERE T.ISBN = PRICE.ISBN AND T.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
             else 
-              $sql = "SELECT BOOK.ISBN, Title, Price FROM BOOK, PRICE WHERE BOOK.ISBN = PRICE.ISBN AND BOOK.Category = '".$GLOBALS['cate']."' AND BOOK.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
+              $sql = "SELECT T.ISBN, Title, Price FROM (".$global_sql.") T, PRICE WHERE T.ISBN = PRICE.ISBN AND T.Category = '".$GLOBALS['cate']."' AND T.PubName = '".$GLOBALS['pub']."' LIMIT " . ($curpage - 1) * $showrow . ",$showrow";
         
             if ($odr_price)
               $sql = "SELECT * FROM (".$sql.") TMP ORDER BY TMP.Price";
@@ -121,13 +128,13 @@
             // fetch data
             //echo $sql;
             $result = mysqli_query($conn, $sql);
-            while ($row = mysqli_fetch_array($result)) {
+            while ($row = mysqli_fetch_array($GLOBALS['result'])) {
                 echo '
                 <div class="prod_box">
                     <div class="center_prod_box">
-                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                      <div class="product_title"><a href="display_details.php?id='.$row['ISBN'].'">'. $row['Title'] .'</a></div>
                       <div class="product_img">
-                        <a href="#" id="'.$hrefid.'">
+                        <a href="display_details.php?id='.$row['ISBN'].'" id="'.$hrefid.'">
                             <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
                         </a>
                         <script type="text/javascript">
@@ -139,7 +146,7 @@
                       </div>
                       <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                     </div>
-                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                    <div class="prod_details_tab"> <a href="cart_action.php?action=addToCart&id='.$row['ISBN'].'" class="prod_buy">Add to Cart</a> 
                     <a target="_blank" href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
                 </div>
                 ';
@@ -158,10 +165,10 @@
     <!-- end of center content -->
     <div class="right_content">
       <div class="title_box">Search</div>
-      <div>
+        <div>
         <form action="search_result.php" method="post">
           <div>
-            <input type="text" name="title" class="search_input" placeholder="enter the title">
+            <input type="text" name="title" class="search_input" placeholder="Search the title">
           </div>
           <input class="search_submit" type='submit' name="submit" value='Search'>
           <a target="_blank" href="advanced_search.php" class="join">Advanced</a>
@@ -169,9 +176,9 @@
       </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
-        <div class="cart_details"> 3 items <br />
-          <span class="border_cart"></span> Total: <span class="price">350$</span> </div>
-        <div class="cart_icon"><a href="#"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
+        <div class="cart_details"> <?php echo $cart->total_items(); ?> items <br />
+          <span class="border_cart"></span> Total: <span class="price"><?php echo $cart->total(); ?> $</span> </div>
+        <div class="cart_icon"><a href="view_cart.php"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
       </div>
       <div class="title_box">What is new</div>
       <?php 
@@ -181,9 +188,9 @@
                 echo '
                 <div class="prod_box">
                     <div class="center_prod_box">
-                      <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                      <div class="product_title"><a href="display_details.php?id='.$row['ISBN'].'">'. $row['Title'] .'</a></div>
                       <div class="product_img">
-                        <a href="#" id="'.$hrefid.'">
+                        <a href="display_details.php?id='.$row['ISBN'].'" id="'.$hrefid.'">
                             <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
                         </a>
                         <script type="text/javascript">
@@ -195,7 +202,7 @@
                       </div>
                       <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                     </div>
-                    <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                    <div class="prod_details_tab"> <a href="cart_action.php?action=addToCart&id='.$row['ISBN'].'" class="prod_buy">Add to Cart</a> 
                     <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
                 </div>
                 ';

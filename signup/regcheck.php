@@ -17,9 +17,10 @@
                 echo "<script>alert('Username registered!'); 
                 history.go(-1);</script>";  
             } else {
-                $insert_sql = "INSERT INTO USER(Fname, Lname, Usrname, Email, Passwd, Addr) VALUES ('SET YOUR FIRST NAME', 'SET YOUR LAST NAME', '$_POST[username]', 'SET YOUR EMAIL', '$_POST[password]', 'SET YOUR ADDRESS')";
+                $insert_sql = "INSERT INTO USER(Usrname, Passwd) VALUES ('$_POST[username]', '$_POST[password]')";
                 if ($conn->query($insert_sql) === TRUE) {
                         $_SESSION['login_name'] = $_POST['username'];
+                        $_SESSION['login_id'] = $conn->insert_id;
                         echo "<script>
                         alert('New account created, click OK to go back to home...');
                         window.location.href='../index.php';

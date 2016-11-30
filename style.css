@@ -301,6 +301,11 @@ padding:10px 10px 10px 10px;
   float:left;
   padding: 0 0 0 10px;
 }
+.desc_box{
+  width:600px;height: 350px;
+  float:left;
+  margin: 50px 0 0 0;
+}
 .center_prod_box{
 width:173px;height: 230px;
 float:left; 
@@ -737,3 +742,17 @@ margin-left: 50px;
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+
+.desc_text {
+  margin-top: 40px;
+  margin-left: 20px;
+  width :550px;
+  height:150px;
+}
+
+.show_specials{
+  width:1000px;
+  height:290px;
+}
+
+

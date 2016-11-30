@@ -1,4 +1,6 @@
 <?php
+  include 'cart.php';
+  $cart = new Cart;
 	include_once "helper/dbconn.php";
   require_once('helper/pageclass.php');
 	$id = empty($_GET['id']) ? NULL : $_GET['id'];
@@ -20,7 +22,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Books Store | Details</title>
+<title>Book Store | Details</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="js/boxOver.js"></script>
@@ -41,9 +43,9 @@
           echo '
           <div class="prod_box">
               <div class="center_prod_box">
-                <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                <div class="product_title"><a href="display_details.php?id='.$row['ISBN'].'">'. $row['Title'] .'</a></div>
                 <div class="product_img">
-                  <a href="#" id="'.$hrefid.'">
+                  <a href="display_details.php?id='.$row['ISBN'].'" id="'.$hrefid.'">
                       <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
                   </a>
                   <script type="text/javascript">
@@ -55,7 +57,7 @@
                 </div>
                 <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
               </div>
-              <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+              <div class="prod_details_tab"> <a href="cart_action.php?action=addToCart&id='.$row['ISBN'].'" class="prod_buy">Add to Cart</a> 
               <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
           </div>
           ';
@@ -77,7 +79,7 @@
 						</script>
 						"; ?> 
 		</div>
-		<div class="desc_prod_box"?>
+		<div class="desc_prod_box">
 		<fieldset>
 			<legend>Book Details</legend>
 			<div>
@@ -101,23 +103,42 @@
 				<p></p>
 				<p></p>
 				<p></p>
-				<a href="#" class="prod_buy">Add to Cart</a>
-				<a href="#" class="prod_buy">Buy now</a>
+        <?php 
+          echo '
+          <a href="cart_action.php?action=addToCart&id='.$id.'" class="prod_buy">Add to Cart</a>
+          <a href="#" class="prod_buy">Buy now</a>
+          ';
+        ?>
 			</div>
 		</fieldset>
 		</div>
+    <div class="desc_box">
+    <div class="center_title_bar">Book Description</div>
+    <div class="desc_text">
+      <h3>Title</h3>
+      <p><?php echo $title; ?></p>
+      <h3>Description</h3>
+      <p>This the description</p>
+    </div>
+    </div>
 	</div>
 	<!-- end of center contents-->
     <div class="right_content">
       <div class="title_box">Search</div>
-      <div class="border_box">
-        <input type="text" name="newsletter" class="newsletter_input" placeholder="keyword"/>
-        <a href="#" class="join">search</a> </div>
+      <div>
+        <form action="search_result.php" method="post">
+          <div>
+            <input type="text" name="title" class="search_input" placeholder="Search the title">
+          </div>
+          <input class="search_submit" type='submit' name="submit" value='Search'>
+          <a target="_blank" href="advanced_search.php" class="join">Advanced</a>
+        </form>
+      </div>
       <div class="shopping_cart">
         <div class="title_box">Shopping cart</div>
-        <div class="cart_details"> 3 items <br />
-          <span class="border_cart"></span> Total: <span class="price">350$</span> </div>
-        <div class="cart_icon"><a href="#"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
+        <div class="cart_details"> <?php echo $cart->total_items(); ?> items <br />
+          <span class="border_cart"></span> Total: <span class="price"><?php echo $cart->total(); ?> $</span> </div>
+        <div class="cart_icon"><a href="view_cart.php"><img src="images/shoppingcart.png" alt="" width="35" height="35" border="0" /></a></div>
       </div>
       <div class="title_box">What is new</div>
       <?php 
@@ -128,9 +149,9 @@
             echo '
             <div class="prod_box">
                 <div class="center_prod_box">
-                  <div class="product_title"><a href="#">'. $row['Title'] .'</a></div>
+                  <div class="product_title"><a href="#display_details.php?id='.$row['ISBN'].'>'. $row['Title'] .'</a></div>
                   <div class="product_img">
-                    <a href="#" id="'.$hrefid.'">
+                    <a href="display_details.php?id='.$row['ISBN'].'" id="'.$hrefid.'">
                         <img id="'.$row['ISBN'].'" src="http://images.amazon.com/images/P/'.$row['ISBN'].'.01.MZZZZZZZ.jpg">
                     </a>
                     <script type="text/javascript">
@@ -142,7 +163,7 @@
                   </div>
                   <div class="prod_price"><span class="reduce">'.ceil($row['Price']*1.3).'$</span> <span class="price">'.$row['Price'].'$</span></div>
                 </div>
-                <div class="prod_details_tab"> <a href="#" class="prod_buy">Add to Cart</a> 
+                <div class="prod_details_tab"> <a href="cart_action.php?action=addToCart&id='.$row['ISBN'].'" class="prod_buy">Add to Cart</a> 
                 <a href="display_details.php?id='.$row['ISBN'].'" class="prod_details">Details</a></div>
             </div>
             ';
@@ -154,5 +175,7 @@
 <?php 
 		require('helper/footer.php');
 ?>
+<script type="text/javascript">
+</script>
 </body>
 </html>

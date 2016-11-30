@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	//ini_set('display_errors', 'On');
 	include_once "helper/dbconn.php";
 	if (isset($_SESSION["login_name"])) {
 		$sql = "SELECT Fname, Lname, Email, Addr FROM USER WHERE Usrname = '".$_SESSION["login_name"]."'";
@@ -11,8 +12,6 @@
 				$email = $row['Email'];
 				$addr = $row['Addr'];
 	    	}
-	    $result->close();
-	    $conn->close();
 	} else {
 		echo "
 			<script>
@@ -30,6 +29,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="js/boxOver.js"></script>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    color: #666000;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
 </head>
 <body>
 <div id="main_container">
@@ -42,19 +59,19 @@
 <div>
   <form action='myacc_user_update.php' method="post">
         <div>
-	        <input type="text" name="first_name" class="user_input" value="<?php echo $fname;?>">
+	        <input type="text" name="first_name" class="user_input" value="<?php if ($fname != NULL) echo $fname; else echo 'Set Your First Name';?>">
 	    </div>
 	    
 	    <div>
-	        <input type="text" name="last_name" class="user_input" value="<?php echo $lname;?>">
+	        <input type="text" name="last_name" class="user_input" value="<?php if ($lname != NULL) echo $lname; else echo 'Set Your Last Name';?>">
 	    </div>
 
 	    <div>
-	        <input type="text" name="email" class="user_input" value="<?php echo $email;?>"">
+	        <input type="text" name="email" class="user_input" value="<?php if ($email != NULL) echo $email; else echo 'Set Your Email Address';?>"">
 	    </div>
 	    
 	    <div>
-	        <input type="text" name="addr" class="user_input" value="<?php echo $addr;?>">
+	        <input type="text" name="addr" class="user_input" value="<?php if ($addr != NULL) echo $addr; else echo 'Set Your Address';?>">
 	    </div>
 
 	    <input type='submit' name="submit" value='Save Changes'>
@@ -64,13 +81,55 @@
 <fieldset>
 	<legend>Recent Order</legend>
 	<div>
-		<p><font size=2 color="#666000">You have no recent order.</font></p>
+		<?php 
+			$sql_odr = "SELECT Usrname, Total, Created, Modified FROM ORDERS WHERE CUS_ID = '".$_SESSION['login_id']."'";
+			$result = mysqli_query($conn, $sql_odr);
+			echo '<table>
+				  <tr>
+				    <th>Username</th>
+				    <th>Total Charged</th>
+				    <th>Order Created</th>
+				    <th>Order Modified</th>
+				  </tr>';
+			while ($row = $result->fetch_assoc()) {
+				echo '
+					<tr>
+						<td>'.$row['Usrname'].'</td>
+						<td>'.$row['Total'].' $</td>
+						<td>'.$row['Created'].'</td>
+						<td>'.$row['Modified'].'</td>
+					</tr>
+				';
+			}
+			echo '</table>';
+		?>
 	</div>
 </fieldset>
 <fieldset>
 	<legend>Recently Purchased</legend>
 	<div>
-		<p><font size=2 color="#666000">You have no recent purchase.</font></p>
+		<?php 
+			$sql_items = "SELECT ORDERS.Usrname, ORDERS.Created, ORDER_ITEMS.ISBN, ORDER_ITEMS.Quantity FROM ORDERS, ORDER_ITEMS 			  WHERE ORDERS.ODR_ID = ORDER_ITEMS.ORD_ID AND ORDERS.CUS_ID = '".$_SESSION['login_id']."'";
+			$result = mysqli_query($conn, $sql_items);
+			echo '<table>
+				  <tr>
+				    <th>Username</th>
+				    <th>Order Created</th>
+				    <th>Book ISBN</th>
+				    <th>Quantity</th>
+				  </tr>';
+			while ($row = $result->fetch_assoc()) {
+				echo '
+					<tr>
+						<td>'.$row['Usrname'].'</td>
+						<td>'.$row['Created'].'</td>
+						<td>'.$row['ISBN'].'</td>
+						<td>'.$row['Quantity'].'</td>
+					</tr>
+				';
+			}
+			echo '</table>';
+		?>
 	</div>
 </fieldset>
 <?php

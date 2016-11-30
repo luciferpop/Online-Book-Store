@@ -25,7 +25,7 @@
                         $_SESSION['login_name'] = $_POST['username'];
                         echo "<script>
                         alert('New account created, click OK to go back to home...');
-                        window.location.href='../index.php';
+                        window.location.href='../admin_index.php';
                         </script>"; 
                     } else {
                         echo "Error: " . $sql . "<br>" . $conn->error;

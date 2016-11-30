@@ -1,5 +1,7 @@
 <?php 
   session_start();
+  include_once "helper/dbconn.php";
+  require_once('helper/pageclass.php');
 ?>
 <div id="main_container">
 <div id="header">
@@ -10,23 +12,21 @@
 <div id="main_content">
   <div id="menu_tab">
     <ul class="menu">
-      <li><a href="index.php" class="nav"> Home </a></li>
-      <li class="divider"></li>
-      <li><a href="display_books.php" class="nav">Books</a></li>
-      <li class="divider"></li>
-      <li><a href="specials.php" class="nav">Specials</a></li>
-      <li class="divider"></li>
-      <li><a href="myaccount.php" class="nav">My account</a></li>
-      <li class="divider"></li>
-      <li><a href="view_cart.php" class="nav">My Cart</a></li>
-      <li class="divider"></li>
-      <li><a href="signup/signup.php" class="nav">Sign up</a></li>
-      <li class="divider"></li>
-      <li><a href="login/login.php" class="nav">Sign in</a></li>
-      <li class="divider"></li>
-      <li><a href="#" class="nav">Details</a></li>
-      <li class="divider"></li>
-      <li>
+      <li><a href="admin_index.php" class="nav"> Home </a></li>
+        <li class="divider"></li>
+        <li><a href="myacc_admin.php" class="nav">My Account</a></li>
+        <li class="divider"></li>
+        <li><a href="display_books.php" class="nav">Manage User</a></li>
+        <li class="divider"></li>
+        <li><a href="specials.php" class="nav">Mange Book</a></li>
+        <li class="divider"></li>
+        <li><a href="myaccount.php" class="nav">Manage Order</a></li>
+        <li class="divider"></li>
+        <li><a href="signup/signup.php" class="nav">Backup Database</a></li>
+        <li class="divider"></li>
+        <li><a href="logout.php" class="nav">Logout</a></li>
+        <li class="divider"></li>
+        <li>
       <?php 
         if (isset($_SESSION["login_name"])) {
           echo "<font color='white'>&nbsp&nbsp&nbsp&nbspHello
