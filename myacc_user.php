@@ -82,7 +82,7 @@ tr:nth-child(even) {
 	<legend>Recent Order</legend>
 	<div>
 		<?php 
-			$sql_odr = "SELECT Usrname, Total, Created, Modified FROM ORDERS WHERE CUS_ID = '".$_SESSION['login_id']."'";
+			$sql_odr = "SELECT Usrname, Total, Created, Modified FROM ORDERS WHERE CUS_ID = '".$_SESSION['login_id']."' ORDER BY Created DESC";
 			$result = mysqli_query($conn, $sql_odr);
 			echo '<table>
 				  <tr>
@@ -109,7 +109,7 @@ tr:nth-child(even) {
 	<legend>Recently Purchased</legend>
 	<div>
 		<?php 
-			$sql_items = "SELECT ORDERS.Usrname, ORDERS.Created, ORDER_ITEMS.ISBN, ORDER_ITEMS.Quantity FROM ORDERS, ORDER_ITEMS 			  WHERE ORDERS.ODR_ID = ORDER_ITEMS.ORD_ID AND ORDERS.CUS_ID = '".$_SESSION['login_id']."'";
+			$sql_items = "SELECT ORDERS.Usrname, ORDERS.Created, ORDER_ITEMS.ISBN, ORDER_ITEMS.Quantity FROM ORDERS, ORDER_ITEMS 			  WHERE ORDERS.ODR_ID = ORDER_ITEMS.ORD_ID AND ORDERS.CUS_ID = '".$_SESSION['login_id']."' ORDER BY     			  ORDERS.Created DESC";
 			$result = mysqli_query($conn, $sql_items);
 			echo '<table>
 				  <tr>

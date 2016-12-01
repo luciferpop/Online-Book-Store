@@ -1,5 +1,5 @@
 <?php
-	session_start();
+	// session_start();
 	include_once "helper/dbconn.php";
 	if(isset($_POST["submit"]) && $_POST["submit"] == "Save Changes") {
 		$usrname = $_SESSION["login_name"];

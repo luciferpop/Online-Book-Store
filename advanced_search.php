@@ -1,6 +1,6 @@
 <?php
-  session_start();
-  ini_set('display_errors', 'On');
+  // session_start();
+  // ini_set('display_errors', 'On');
   include_once "helper/dbconn.php";
   require_once('helper/pageclass.php');
  ?>

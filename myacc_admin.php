@@ -1,5 +1,5 @@
 <?php
-	session_start();
+	// session_start();
 	include_once "helper/dbconn.php";
 	if (isset($_SESSION["login_name"])) {
 		$sql = "SELECT ID, Usrname, Fname, Lname, Email, Addr FROM ADMIN WHERE Usrname = '".$_SESSION["login_name"]."'";

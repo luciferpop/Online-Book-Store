@@ -1,5 +1,5 @@
 <?php
-  session_start();
+  // session_start();
   include "cart.php";
   $cart = new Cart;
   //ini_set('display_errors', 'On');

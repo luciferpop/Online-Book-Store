@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 // initialize shopping cart class
 include 'cart.php';
 $cart = new Cart;

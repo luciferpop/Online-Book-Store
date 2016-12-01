@@ -5,6 +5,11 @@
   include_once "helper/dbconn.php";
   require_once('helper/pageclass.php');
   //$_SESSION["login_name"] = null;
+  // $time = date("Y-m-d H:i:s");
+  // $ip = $_SERVER['REMOTE_ADDR'];
+  // $port = $_SERVER['REMOTE_PORT'];
+  // $user = $_SERVER['REMOTE_USER'];
+  // $conn->query("INSERT INTO RECORD (Time, IP, Port, User) VALUES ('".$time."', '".$ip."', '".$port."', '".$user."')");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -70,9 +75,9 @@
               $index = 0;
               while ($row = $cate_result->fetch_assoc()) {
                   if ($index%2 == 0) 
-                      echo '<li class="odd"><a href="display_books.php?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="odd"><a href="display_books.php?&cate='.$row['Category'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   else
-                      echo '<li class="even"><a href="display_books.php?&cate='.$row['Category'].'&pub='.$GLOBALS['pub'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
+                      echo '<li class="even"><a href="display_books.php?&cate='.$row['Category'].'">'.$row['Category']. ' ('.$row['CNT'].')'.'</a></li>';
                   $index++;
               }
           ?>
@@ -178,9 +183,9 @@
           $index = 0;
           while ($row = $result->fetch_assoc()) {
               if ($index%2 == 0) 
-                  echo '<li class="odd"><a href="display_books.php?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                  echo '<li class="odd"><a href="display_books.php?&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
               else
-                  echo '<li class="even"><a href="display_books.php?&cate='.$GLOBALS['cate'].'&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
+                  echo '<li class="even"><a href="display_books.php?&pub='.$row['PubName'].'">'.$row['PubName']. ' ('.$row['CNT'].')'.'</a></li>';
               $index++;
           }
       ?>
