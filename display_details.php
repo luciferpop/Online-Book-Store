@@ -106,7 +106,7 @@
         <?php 
           echo '
           <a href="cart_action.php?action=addToCart&id='.$id.'" class="prod_buy">Add to Cart</a>
-          <a href="#" class="prod_buy">Buy now</a>
+          <a href="cart_action.php?action=addToCart&id='.$id.'" class="prod_buy">Buy now</a>
           ';
         ?>
 			</div>

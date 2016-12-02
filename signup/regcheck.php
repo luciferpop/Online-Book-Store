@@ -17,7 +17,8 @@
                 echo "<script>alert('Username registered!'); 
                 history.go(-1);</script>";  
             } else {
-                $insert_sql = "INSERT INTO USER(Usrname, Passwd) VALUES ('$_POST[username]', '$_POST[password]')";
+                $time = date('Y-m-d H:i:s');
+                $insert_sql = "INSERT INTO USER(Usrname, Passwd, Created) VALUES ('$_POST[username]', '$_POST[password]', '$time')";
                 if ($conn->query($insert_sql) === TRUE) {
                         $_SESSION['login_name'] = $_POST['username'];
                         $_SESSION['login_id'] = $conn->insert_id;

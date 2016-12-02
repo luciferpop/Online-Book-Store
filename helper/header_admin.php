@@ -16,13 +16,13 @@
         <li class="divider"></li>
         <li><a href="myacc_admin.php" class="nav">My Account</a></li>
         <li class="divider"></li>
-        <li><a href="display_books.php" class="nav">Manage User</a></li>
+        <li><a href="manage_user.php" class="nav">Manage User</a></li>
         <li class="divider"></li>
-        <li><a href="specials.php" class="nav">Mange Book</a></li>
+        <li><a href="manage_book.php" class="nav">Mange Book</a></li>
         <li class="divider"></li>
-        <li><a href="myaccount.php" class="nav">Manage Order</a></li>
+        <li><a href="manage_order.php" class="nav">Manage Order</a></li>
         <li class="divider"></li>
-        <li><a href="signup/signup.php" class="nav">Backup Database</a></li>
+        <li><a href="backup.php" class="nav">Backup Database</a></li>
         <li class="divider"></li>
         <li><a href="logout.php" class="nav">Logout</a></li>
         <li class="divider"></li>

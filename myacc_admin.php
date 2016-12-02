@@ -1,5 +1,6 @@
 <?php
-	// session_start();
+	session_start();
+	error_reporting(E_ERROR);
 	include_once "helper/dbconn.php";
 	if (isset($_SESSION["login_name"])) {
 		$sql = "SELECT ID, Usrname, Fname, Lname, Email, Addr FROM ADMIN WHERE Usrname = '".$_SESSION["login_name"]."'";
@@ -17,7 +18,7 @@
 		echo "
 			<script>
 				alert('Please login first! Redirecting...');
-				window.location.href='index.php';
+				window.location.href='admin_index.php';
 			</script>
 		";
 	}
@@ -27,8 +28,20 @@
 <head>
 <title>My Account | Admin</title>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+<link rel="stylesheet" type="text/css" href="css/table.css" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="js/boxOver.js"></script>
+<style type="text/css">
+input[type=text], select {
+width: 80%;
+padding: 10px 10px;
+margin: 0px;
+display: inline-block;
+border: 1px solid #666000;
+border-radius: 4px;
+box-sizing: border-box;
+}
+</style>
 </head>
 <body>
 <div id="main_container">
@@ -40,22 +53,27 @@
 <legend><?php echo $_SESSION["login_name"];?> 's account</legend>
 <div>
   <form action='myacc_admin_update.php' method="post">
-        <div>
-	        <input type="text" name="first_name" class="user_input" value="<?php if ($fname != NULL) echo $fname; else echo 'Set Your First Name';?>">
-	    </div>
+  	<table>
+        <tr>
+        	<td><strong>First Name: </strong></td>
+	        <td><input type="text" name="first_name" value="<?php if ($fname != NULL) echo $fname; else echo 'Set Your First Name';?>"></td>
+	    </tr>
 	    
-	    <div>
-	        <input type="text" name="last_name" class="user_input" value="<?php if ($lname != NULL) echo $lname; else echo 'Set Your Last Name';?>">
-	    </div>
+	    <tr>
+	    	<td><strong>Last Name: </strong></td>
+	        <td><input type="text" name="last_name" value="<?php if ($lname != NULL) echo $lname; else echo 'Set Your Last Name';?>"></td>
+	    </tr>
 
-	    <div>
-	        <input type="text" name="email" class="user_input" value="<?php if ($email != NULL) echo $email; else echo 'Set Your Email Address';?>"">
-	    </div>
+	    <tr>
+	    	<td><strong>Email: </strong></td>
+	        <td><input type="text" name="email" value="<?php if ($email != NULL) echo $email; else echo 'Set Your Email Address';?>""></td>
+	    </tr>
 	    
-	    <div>
-	        <input type="text" name="addr" class="user_input" value="<?php if ($addr != NULL) echo $addr; else echo 'Set Your Address';?>">
-	    </div>
-
+	    <tr>
+	    	<td><strong>Address: </strong></td>
+	        <td><input type="text" name="addr" value="<?php if ($addr != NULL) echo $addr; else echo 'Set Your Address';?>"></td>
+	    </tr>
+	</table>
 	    <input type='submit' name="submit" value='Save Changes'>
   </form>
 </div>

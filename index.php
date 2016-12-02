@@ -1,5 +1,6 @@
 <?php
   session_start();
+  error_reporting(E_ERROR);
   include "cart.php";
   $cart = new Cart;
   include_once "helper/dbconn.php";
@@ -44,7 +45,7 @@
         <li class="divider"></li>
         <li><a href="login/login.php" class="nav">Sign in</a></li>
         <li class="divider"></li>
-        <li><a href="#" class="nav">Contact us</a></li>
+        <li><a href="#" class="nav">Details</a></li>
         <li class="divider"></li>
         <li>
         <?php 

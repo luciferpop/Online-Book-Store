@@ -9,7 +9,7 @@ $cart = new Cart;
     <title>Book Store | View Cart</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

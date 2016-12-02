@@ -1,5 +1,6 @@
 <?php
   // session_start();
+  error_reporting(E_ERROR);
   include "cart.php";
   $cart = new Cart;
   //ini_set('display_errors', 'On');
